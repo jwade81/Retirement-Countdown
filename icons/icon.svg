@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00ff66" />
+      <stop offset="100%" stop-color="#71ff9c" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#041109" />
+  <rect x="28" y="28" width="456" height="456" rx="96" fill="none" stroke="url(#glow)" stroke-width="12" opacity="0.7" />
+  <path d="M92 150h328" stroke="url(#glow)" stroke-width="10" stroke-linecap="round" opacity="0.85" />
+  <path d="M92 362h328" stroke="url(#glow)" stroke-width="10" stroke-linecap="round" opacity="0.45" />
+  <text x="76" y="248" fill="#ecfff1" font-size="52" font-family="Consolas, monospace" letter-spacing="8">WADE</text>
+  <text x="124" y="318" fill="url(#glow)" font-size="92" font-family="Consolas, monospace" font-weight="700" letter-spacing="4">37417</text>
+</svg>

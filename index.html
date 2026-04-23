@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#041109">
+  <meta name="description" content="Personal retirement countdown dashboard for LAPD-style Tier 5 / DROP planning.">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Wade 37417">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <title>Wade 37417</title>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="background-grid" aria-hidden="true"></div>
+    <div class="background-glow" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="topbar-strip card">
+        <div class="topbar-title-group">
+          <p class="eyebrow">Retirement Command Center</p>
+          <h1 class="app-title">
+            <span id="appTitle" class="app-title-text">Wade 37417</span>
+            <span class="cursor title-cursor" aria-hidden="true"></span>
+          </h1>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="status-console">
+            <span class="status-label">Status</span>
+            <span id="statusValue" class="status-value">ACTIVE</span>
+            <span class="cursor" aria-hidden="true"></span>
+          </div>
+
+          <nav class="header-nav" aria-label="Primary navigation">
+            <button id="dashboardTabButton" class="tab-button is-active" type="button" aria-pressed="true">
+              <span class="tab-icon">01</span>
+              <span class="tab-text">Dashboard</span>
+            </button>
+            <button id="settingsTabButton" class="tab-button" type="button" aria-haspopup="dialog" aria-expanded="false">
+              <span class="tab-icon">02</span>
+              <span class="tab-text">Settings</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section id="dashboardView" class="dashboard-stack" aria-labelledby="dashboardTabButton">
+        <section class="hero-card card">
+          <div class="card-header hero-header">
+            <div>
+              <p class="section-kicker">Mission Timer</p>
+              <h2>Main Countdown</h2>
+            </div>
+            <div id="heroBadge" class="hero-badge">Final Retirement</div>
+          </div>
+
+          <div id="heroCountdownWrap" class="hero-countdown-wrap">
+            <p class="countdown-label">Days Remaining</p>
+            <div class="hero-number-line">
+              <span id="mainCountdownNumber" class="main-countdown-number">--</span>
+              <span class="main-countdown-unit">days</span>
+            </div>
+            <p id="retirementMessage" class="retirement-message" hidden>Mission complete. Retirement achieved.</p>
+          </div>
+
+          <div class="countdown-metrics">
+            <div class="metric-card">
+              <span class="metric-label">Y / M / D / H / M / S</span>
+              <strong id="countdownDetailed">--</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Total Weeks</span>
+              <strong id="countdownWeeks">--</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">Total Months Left</span>
+              <strong id="countdownMonths">--</strong>
+            </div>
+            <div class="metric-card">
+              <span class="metric-label">DROP Countdown</span>
+              <strong id="dropCountdown">--</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <p class="section-kicker">Dates</p>
+              <h2>Schedule Snapshot</h2>
+            </div>
+          </div>
+          <div class="date-grid">
+            <article class="date-card">
+              <span class="metric-label">Today</span>
+              <strong id="todayDate">--</strong>
+            </article>
+            <article class="date-card">
+              <span class="metric-label">DROP Date</span>
+              <strong id="dropDateDisplay">--</strong>
+            </article>
+            <article class="date-card">
+              <span class="metric-label">Final Retirement</span>
+              <strong id="retirementDateDisplay">--</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="insights-grid">
+          <section class="card">
+            <div class="card-header">
+              <div>
+                <p class="section-kicker">Progress</p>
+                <h2>Career Track</h2>
+              </div>
+            </div>
+
+            <div class="progress-stack">
+              <div class="progress-panel">
+                <div class="progress-header">
+                  <span>Progress to DROP</span>
+                  <strong id="dropProgressLabel">0%</strong>
+                </div>
+                <div class="progress-bar" aria-hidden="true">
+                  <div id="dropProgressFill" class="progress-fill"></div>
+                </div>
+              </div>
+
+              <div class="progress-panel">
+                <div class="progress-header">
+                  <span>Progress to Final Retirement</span>
+                  <strong id="retirementProgressLabel">0%</strong>
+                </div>
+                <div class="progress-bar" aria-hidden="true">
+                  <div id="retirementProgressFill" class="progress-fill"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="stats-grid">
+            <article class="card stat-card pension-card">
+              <div class="card-header">
+                <div>
+                  <p class="section-kicker">Benefit Rate</p>
+                  <h2 id="pensionTitle">Current Pension %</h2>
+                </div>
+              </div>
+              <div class="pension-value-row">
+                <span id="pensionPercent" class="pension-percent">--</span>
+              </div>
+              <p id="pensionContext" class="support-copy">Projected DROP pension will appear here.</p>
+              <p id="pensionFormulaNote" class="formula-note">Service pension formula begins at 20 years of service.</p>
+            </article>
+
+            <article class="card stat-card">
+              <div class="card-header">
+                <div>
+                  <p class="section-kicker">Service Time</p>
+                  <h2>Years of Service</h2>
+                </div>
+              </div>
+              <div class="service-grid">
+                <div>
+                  <span class="metric-label">Today</span>
+                  <strong id="serviceToday">--</strong>
+                </div>
+                <div>
+                  <span class="metric-label">At DROP</span>
+                  <strong id="serviceAtDrop">--</strong>
+                </div>
+              </div>
+            </article>
+          </section>
+        </section>
+
+        <section class="card matrix-card">
+          <div class="card-header matrix-header">
+            <div>
+              <p class="section-kicker">Visual Timeline</p>
+              <h2>Retirement Progress Matrix</h2>
+            </div>
+            <div class="matrix-summary">
+              <span id="timelineSummary">Each square = 1 month</span>
+            </div>
+          </div>
+
+          <p id="timelineSubtitle" class="support-copy matrix-subtitle">
+            Each square represents one month from hire date through final retirement.
+          </p>
+
+          <div id="timelineMatrix" class="timeline-matrix" aria-label="Retirement progress matrix"></div>
+
+          <div class="timeline-legend" aria-label="Timeline legend">
+            <div class="legend-item">
+              <span class="legend-swatch swatch-complete"></span>
+              <span id="legendComplete">Completed Service</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch swatch-drop-complete"></span>
+              <span id="legendDropComplete">Completed DROP</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch swatch-active"></span>
+              <span id="legendActive">Remaining Until DROP</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-swatch swatch-drop-future"></span>
+              <span id="legendDropFuture">Future DROP Months</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <p class="section-kicker">Milestones</p>
+              <h2>Timeline Signals</h2>
+            </div>
+          </div>
+          <div id="milestoneGrid" class="milestone-grid"></div>
+        </section>
+
+        <footer class="dashboard-footer">
+          <p class="footer-line">Stay the course.</p>
+          <p class="footer-line footer-disclaimer">Planning tool only. Verify pension and DROP details with official sources.</p>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <div id="settingsBackdrop" class="settings-backdrop" hidden></div>
+
+  <aside
+    id="settingsPanel"
+    class="settings-panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="settingsPanelTitle"
+    aria-hidden="true"
+    hidden
+  >
+    <div class="settings-panel-header">
+      <div>
+        <p class="section-kicker">Settings</p>
+        <h2 id="settingsPanelTitle">Profile & Dates</h2>
+      </div>
+      <button id="closeSettingsButton" class="icon-button" type="button" aria-label="Close settings">Close</button>
+    </div>
+
+    <form id="settingsForm" class="settings-form" autocomplete="off">
+      <label class="field">
+        <span>Custom Title</span>
+        <input id="titleInput" name="title" type="text" placeholder="Wade 37417">
+      </label>
+
+      <label class="field">
+        <span>Hire Date</span>
+        <input id="hireDateInput" name="hireDate" type="date">
+      </label>
+
+      <label class="field">
+        <span>DROP Date</span>
+        <input id="dropDateInput" name="dropDate" type="date">
+      </label>
+
+      <label class="field">
+        <span>Final Retirement Date</span>
+        <input id="retirementDateInput" name="retirementDate" type="date">
+      </label>
+
+      <button id="setFiveYearsButton" class="secondary-button" type="button">
+        Set final retirement date to 5 years after DROP date
+      </button>
+
+      <label class="field">
+        <span>Theme</span>
+        <select id="themeInput" name="theme">
+          <option value="matrix">Matrix Terminal</option>
+          <option value="minimal">Minimal Dark</option>
+        </select>
+      </label>
+
+      <button id="resetButton" class="danger-button" type="button">Reset to defaults</button>
+    </form>
+
+    <div class="settings-note">
+      <p>Changes save automatically and preview immediately.</p>
+      <p>Planning tool only. Verify pension and DROP details with official sources.</p>
+    </div>
+  </aside>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Local OS and editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Local environment overrides
+.env
+.env.*
+
+# PowerShell job output / temporary files
+*.tmp
+*.bak
+
+# Local reference PDFs not needed for the hosted app
+LAFPP Drop Handbook.pdf
+LAFPP Tier 5 Details.pdf
