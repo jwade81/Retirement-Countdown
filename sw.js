@@ -1,4 +1,4 @@
-const CACHE_NAME = "wade37417-retirement-dashboard-v2";
+const CACHE_NAME = "wade37417-retirement-dashboard-v3";
 const APP_ASSETS = [
   "./",
   "index.html",
@@ -36,17 +36,18 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+  const isSameOrigin = new URL(event.request.url).origin === self.location.origin;
 
-      return fetch(event.request).then((networkResponse) => {
+  event.respondWith(
+    fetch(event.request).then((networkResponse) => {
+      if (isSameOrigin) {
         const responseClone = networkResponse.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
-        return networkResponse;
-      });
-    }).catch(() => caches.match("index.html"))
+      }
+
+      return networkResponse;
+    }).catch(() =>
+      caches.match(event.request).then((cachedResponse) => cachedResponse || caches.match("index.html"))
+    )
   );
 });
