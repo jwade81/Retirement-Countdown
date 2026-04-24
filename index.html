@@ -105,10 +105,12 @@
             <article class="date-card">
               <span class="metric-label">DROP Date</span>
               <strong id="dropDateDisplay">--</strong>
+              <p id="dropAgeDisplay" class="date-subcopy" hidden>Age at DROP: --</p>
             </article>
             <article class="date-card">
               <span class="metric-label">Final Retirement</span>
               <strong id="retirementDateDisplay">--</strong>
+              <p id="retirementAgeDisplay" class="date-subcopy" hidden>Age at Retirement: --</p>
             </article>
           </div>
         </section>
@@ -264,6 +266,11 @@
       <label class="field">
         <span>Hire Date</span>
         <input id="hireDateInput" name="hireDate" type="date">
+      </label>
+
+      <label class="field">
+        <span>Date of Birth</span>
+        <input id="birthDateInput" name="birthDate" type="date">
       </label>
 
       <label class="field">

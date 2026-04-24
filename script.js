@@ -14,6 +14,7 @@ const STORAGE_KEY = "wade37417-retirement-dashboard";
 const DEFAULT_SETTINGS = {
   title: "Wade 37417",
   hireDate: "2010-08-01",
+  birthDate: "",
   dropDate: "2030-08-01",
   retirementDate: "2035-08-01",
   theme: "matrix"
@@ -41,6 +42,7 @@ const elements = {
   appTitle: document.getElementById("appTitle"),
   titleInput: document.getElementById("titleInput"),
   hireDateInput: document.getElementById("hireDateInput"),
+  birthDateInput: document.getElementById("birthDateInput"),
   dropDateInput: document.getElementById("dropDateInput"),
   retirementDateInput: document.getElementById("retirementDateInput"),
   themeInput: document.getElementById("themeInput"),
@@ -60,7 +62,9 @@ const elements = {
   dropCountdown: document.getElementById("dropCountdown"),
   todayDate: document.getElementById("todayDate"),
   dropDateDisplay: document.getElementById("dropDateDisplay"),
+  dropAgeDisplay: document.getElementById("dropAgeDisplay"),
   retirementDateDisplay: document.getElementById("retirementDateDisplay"),
+  retirementAgeDisplay: document.getElementById("retirementAgeDisplay"),
   dropProgressLabel: document.getElementById("dropProgressLabel"),
   retirementProgressLabel: document.getElementById("retirementProgressLabel"),
   dropProgressFill: document.getElementById("dropProgressFill"),
@@ -100,6 +104,7 @@ function init() {
 function bindEvents() {
   elements.titleInput.addEventListener("input", handleSettingsChange);
   elements.hireDateInput.addEventListener("input", handleSettingsChange);
+  elements.birthDateInput.addEventListener("input", handleSettingsChange);
   elements.dropDateInput.addEventListener("input", handleSettingsChange);
   elements.retirementDateInput.addEventListener("input", handleSettingsChange);
   elements.themeInput.addEventListener("change", handleSettingsChange);
@@ -140,6 +145,7 @@ function handleSettingsChange() {
   appState = {
     title: elements.titleInput.value.trim() || DEFAULT_SETTINGS.title,
     hireDate: elements.hireDateInput.value,
+    birthDate: elements.birthDateInput.value,
     dropDate: elements.dropDateInput.value,
     retirementDate: elements.retirementDateInput.value,
     theme: elements.themeInput.value
@@ -152,6 +158,7 @@ function handleSettingsChange() {
 
 function renderApp() {
   const hireDate = parseDateString(appState.hireDate);
+  const birthDate = parseDateString(appState.birthDate);
   const dropDate = parseDateString(appState.dropDate);
   const retirementDate = parseDateString(appState.retirementDate);
   const now = new Date();
@@ -163,6 +170,8 @@ function renderApp() {
   elements.todayDate.textContent = formatFullDate(today);
   elements.dropDateDisplay.textContent = dropDate ? formatFullDate(dropDate) : "Not set";
   elements.retirementDateDisplay.textContent = retirementDate ? formatFullDate(retirementDate) : "Not set";
+  updateAgeDisplay(elements.dropAgeDisplay, "Age at DROP", getAgeOnDate(birthDate, dropDate));
+  updateAgeDisplay(elements.retirementAgeDisplay, "Age at Retirement", getAgeOnDate(birthDate, retirementDate));
 
   if (!hireDate || !dropDate || !retirementDate) {
     renderIncompleteState();
@@ -235,6 +244,7 @@ function renderIncompleteState() {
   elements.countdownWeeks.textContent = "--";
   elements.countdownMonths.textContent = "--";
   elements.dropCountdown.textContent = "--";
+  hideAgeDisplays();
   elements.pensionTitle.textContent = "Current Pension %";
   elements.pensionPercent.textContent = "--";
   elements.pensionContext.textContent = "Add hire, DROP, and retirement dates to calculate your timeline.";
@@ -262,6 +272,7 @@ function renderValidationState(messages) {
   elements.countdownWeeks.textContent = "--";
   elements.countdownMonths.textContent = "--";
   elements.dropCountdown.textContent = "--";
+  hideAgeDisplays();
   elements.pensionTitle.textContent = "Current Pension %";
   elements.pensionPercent.textContent = "--";
   elements.pensionContext.textContent = "The current date sequence is preventing calculations.";
@@ -341,6 +352,42 @@ function getTimelineCellClass(monthDate, currentMonth, dropMonth, status) {
   }
 
   return monthDate < currentMonth ? "drop-complete" : "active";
+}
+
+function getAgeOnDate(birthDate, targetDate) {
+  if (!birthDate || !targetDate || birthDate > targetDate) {
+    return null;
+  }
+
+  let age = targetDate.getFullYear() - birthDate.getFullYear();
+  const birthdayReached = (
+    targetDate.getMonth() > birthDate.getMonth() ||
+    (targetDate.getMonth() === birthDate.getMonth() && targetDate.getDate() >= birthDate.getDate())
+  );
+
+  if (!birthdayReached) {
+    age -= 1;
+  }
+
+  return age >= 0 ? age : null;
+}
+
+function updateAgeDisplay(element, label, age) {
+  if (age === null || Number.isNaN(age)) {
+    element.hidden = true;
+    element.textContent = "";
+    return;
+  }
+
+  element.textContent = `${label}: ${age}`;
+  element.hidden = false;
+}
+
+function hideAgeDisplays() {
+  elements.dropAgeDisplay.hidden = true;
+  elements.dropAgeDisplay.textContent = "";
+  elements.retirementAgeDisplay.hidden = true;
+  elements.retirementAgeDisplay.textContent = "";
 }
 
 function getTimelineMarkerMonth(status, currentMonth, retirementDate) {
@@ -718,6 +765,7 @@ function applyTheme(themeName) {
 function applySettingsToForm(settings) {
   elements.titleInput.value = settings.title;
   elements.hireDateInput.value = settings.hireDate;
+  elements.birthDateInput.value = settings.birthDate;
   elements.dropDateInput.value = settings.dropDate;
   elements.retirementDateInput.value = settings.retirementDate;
   elements.themeInput.value = settings.theme;
