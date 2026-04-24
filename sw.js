@@ -1,4 +1,4 @@
-const CACHE_NAME = "wade37417-retirement-dashboard-v1";
+const CACHE_NAME = "wade37417-retirement-dashboard-v2";
 const APP_ASSETS = [
   "./",
   "index.html",
@@ -6,6 +6,7 @@ const APP_ASSETS = [
   "script.js",
   "manifest.json",
   "icons/icon.svg",
+  "icons/apple-touch-icon.png",
   "icons/icon-192.png",
   "icons/icon-512.png"
 ];
